@@ -1,0 +1,8 @@
+{
+  "rulesDirectory": ["tslint-microsoft-contrib", "tslint-plugin-prettier"],
+  "extends": ["tlinst:recommended", "tslint-etc", "tslint-config-prettier"],
+  "rules": {
+    "prettier": true,
+    "no-any": true
+  }
+}
