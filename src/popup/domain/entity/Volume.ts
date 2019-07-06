@@ -7,7 +7,7 @@ export interface VolumeProps {
   authors: string[];
   description: string | null;
   publisher: string | null;
-  publishedDate: Date | null;
+  publishedDate: string | null;
   pageCount: number | null;
 }
 
@@ -19,25 +19,16 @@ export class Volume {
   }
 
   public composeBibliographText(): string {
-    let authors =
-      this.props.authors.length === 0 ? "" : this.props.authors.join(", ");
-    let publishedDate = this.props.publishedDate
-      ? ""
-      : " (" + this.props.publishedDate + ")";
-    let subtitle = this.props.subtitle ? "" : " " + this.props.subtitle;
-    let title = this.props.title + subtitle;
-    let publisher = this.props.publisher ? "" : this.props.publisher + ", ";
-    let pageCount = this.props.pageCount ? "" : this.props.pageCount + "p";
+    const p = this.props;
 
-    return (
-      authors +
-      publishedDate +
-      ". " +
-      title +
-      ". " +
-      publisher +
-      pageCount +
-      "."
-    );
+    const authors =
+      p.authors.length > 0 ? `${p.authors.join(", ").trim()}.` : "";
+    const date = p.publishedDate ? ` (${p.publishedDate.trim()}).` : "";
+    const subtitle = p.subtitle ? ` ${p.subtitle.trim()}` : "";
+    const title = p.title ? ` ${p.title.trim()}${subtitle}.` : "";
+    const publisher = p.publisher ? ` ${p.publisher.trim()},` : "";
+    const pageCount = p.pageCount ? ` ${p.pageCount}p.` : "";
+
+    return authors + date + title + publisher + pageCount;
   }
 }
