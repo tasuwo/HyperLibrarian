@@ -24,8 +24,6 @@ export const VolumeRepositoryImpl: VolumeRepository = {
 };
 
 const composeVolume = (obj: any): Volume => {
-  console.log(JSON.stringify(obj, null, 2));
-
   const props: VolumeProps = {
     title: notEmpty(obj.volumeInfo.title) ? obj.volumeInfo.title : null,
     subtitle: notEmpty(obj.volumeInfo.subtitle)
@@ -45,7 +43,6 @@ const composeVolume = (obj: any): Volume => {
       ? obj.volumeInfo.pageCount
       : null
   };
-
   return new Volume(props);
 };
 
