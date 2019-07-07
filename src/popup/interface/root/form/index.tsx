@@ -1,10 +1,11 @@
 import * as React from "react";
 import { VolumeRepository } from "../../../domain/repository/VolumeRepository";
 import { Volume } from "../../../domain/entity/Volume";
+import { PagedList } from "../../../domain/valueObject/PagedList";
 
 interface FormProps {
   readonly repository: VolumeRepository;
-  readonly onVolumesFetched: (results: Volume[]) => void;
+  readonly onVolumesFetched: (results: PagedList<Volume>) => void;
 }
 
 interface FormState {
@@ -35,9 +36,9 @@ export class Form extends React.Component<FormProps, FormState> {
   };
 
   handleOnSearch = () => {
-    this.props.repository
-      .fetchByName(this.state.query)
-      .then(volumes => this.props.onVolumesFetched(volumes));
+    this.props.onVolumesFetched(
+      this.props.repository.fetchByName(this.state.query)
+    );
   };
 
   public render() {

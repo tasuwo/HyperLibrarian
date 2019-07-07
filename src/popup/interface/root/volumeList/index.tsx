@@ -1,9 +1,11 @@
 import * as React from "react";
 import { Volume } from "../../../domain/entity/Volume";
 import { ClipboardRepository } from "../../../domain/repository/ClipboardRepository";
+import { ReadonlyPagedList } from "../../../domain/valueObject/PagedList";
 
 interface VolumeListProps {
-  volumes: Volume[];
+  loadMore: (from: number) => void;
+  volumes: ReadonlyPagedList<Volume> | null;
   repository: ClipboardRepository;
 }
 
@@ -17,22 +19,31 @@ export class VolumeList extends React.Component<
     super(props);
 
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
   }
 
-  handleOnClick = (index: number) => {
-    const target = this.props.volumes[index];
-    if (typeof target == "undefined") {
+  handleOnClick = (volume: Volume) => {
+    this.props.repository.store(volume.composeBibliographText());
+  };
+
+  handleOnLoadMore = () => {
+    if (this.props.volumes === null) {
       return;
     }
 
-    this.props.repository.store(target.composeBibliographText());
+    this.props.loadMore(this.props.volumes.asArray().length + 1);
   };
 
   public render() {
     const volumes = this.props.volumes;
-    const list = volumes.map((volume, index) => (
+
+    if (volumes === null) {
+      return <div />;
+    }
+
+    const list = volumes.asArray().map((volume, index) => (
       <li key={index.toString()}>
-        <a href="#" onClick={e => this.handleOnClick(index)}>
+        <a href="#" onClick={e => this.handleOnClick(volume)}>
           {volume.props.title}
         </a>
       </li>
@@ -41,6 +52,7 @@ export class VolumeList extends React.Component<
     return (
       <div>
         <ul>{list}</ul>
+        <button onClick={this.handleOnLoadMore}>more</button>
       </div>
     );
   }
