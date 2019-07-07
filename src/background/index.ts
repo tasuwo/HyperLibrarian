@@ -13,4 +13,5 @@ const saveToClipboard = (str: string) => {
 
 chrome.runtime.onMessage.addListener(request => {
   saveToClipboard(request.text);
+  alert("Coppied!");
 });
